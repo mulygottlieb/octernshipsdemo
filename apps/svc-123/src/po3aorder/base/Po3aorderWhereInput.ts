@@ -13,7 +13,8 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
+import { OfStoreWhereUniqueInput } from "../../ofStore/base/OfStoreWhereUniqueInput";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 
 @InputType()
@@ -28,6 +29,18 @@ class Po3aorderWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => OfStoreWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => OfStoreWhereUniqueInput)
+  @IsOptional()
+  @Field(() => OfStoreWhereUniqueInput, {
+    nullable: true,
+  })
+  of_store?: OfStoreWhereUniqueInput;
 
   @ApiProperty({
     required: false,

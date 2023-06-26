@@ -13,8 +13,9 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
+import { Po3aorderListRelationFilter } from "../../po3aorder/base/Po3aorderListRelationFilter";
 
 @InputType()
 class OfStoreWhereInput {
@@ -50,6 +51,18 @@ class OfStoreWhereInput {
     nullable: true,
   })
   id?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => Po3aorderListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => Po3aorderListRelationFilter)
+  @IsOptional()
+  @Field(() => Po3aorderListRelationFilter, {
+    nullable: true,
+  })
+  po3aorders?: Po3aorderListRelationFilter;
 }
 
 export { OfStoreWhereInput as OfStoreWhereInput };

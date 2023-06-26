@@ -27,6 +27,9 @@ import { OfStoreWhereUniqueInput } from "./OfStoreWhereUniqueInput";
 import { OfStoreFindManyArgs } from "./OfStoreFindManyArgs";
 import { OfStoreUpdateInput } from "./OfStoreUpdateInput";
 import { OfStore } from "./OfStore";
+import { Po3aorderFindManyArgs } from "../../po3aorder/base/Po3aorderFindManyArgs";
+import { Po3aorder } from "../../po3aorder/base/Po3aorder";
+import { Po3aorderWhereUniqueInput } from "../../po3aorder/base/Po3aorderWhereUniqueInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -189,5 +192,110 @@ export class OfStoreControllerBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @common.Get("/:id/po3aorders")
+  @ApiNestedQuery(Po3aorderFindManyArgs)
+  @nestAccessControl.UseRoles({
+    resource: "Po3aorder",
+    action: "read",
+    possession: "any",
+  })
+  async findManyPo3aorders(
+    @common.Req() request: Request,
+    @common.Param() params: OfStoreWhereUniqueInput
+  ): Promise<Po3aorder[]> {
+    const query = plainToClass(Po3aorderFindManyArgs, request.query);
+    const results = await this.service.findPo3aorders(params.id, {
+      ...query,
+      select: {
+        createdAt: true,
+        id: true,
+
+        of_store: {
+          select: {
+            id: true,
+          },
+        },
+
+        t1: true,
+        t2: true,
+        t3: true,
+        updatedAt: true,
+      },
+    });
+    if (results === null) {
+      throw new errors.NotFoundException(
+        `No resource was found for ${JSON.stringify(params)}`
+      );
+    }
+    return results;
+  }
+
+  @common.Post("/:id/po3aorders")
+  @nestAccessControl.UseRoles({
+    resource: "OfStore",
+    action: "update",
+    possession: "any",
+  })
+  async connectPo3aorders(
+    @common.Param() params: OfStoreWhereUniqueInput,
+    @common.Body() body: Po3aorderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      po3aorders: {
+        connect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Patch("/:id/po3aorders")
+  @nestAccessControl.UseRoles({
+    resource: "OfStore",
+    action: "update",
+    possession: "any",
+  })
+  async updatePo3aorders(
+    @common.Param() params: OfStoreWhereUniqueInput,
+    @common.Body() body: Po3aorderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      po3aorders: {
+        set: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
+  }
+
+  @common.Delete("/:id/po3aorders")
+  @nestAccessControl.UseRoles({
+    resource: "OfStore",
+    action: "update",
+    possession: "any",
+  })
+  async disconnectPo3aorders(
+    @common.Param() params: OfStoreWhereUniqueInput,
+    @common.Body() body: Po3aorderWhereUniqueInput[]
+  ): Promise<void> {
+    const data = {
+      po3aorders: {
+        disconnect: body,
+      },
+    };
+    await this.service.update({
+      where: params,
+      data,
+      select: { id: true },
+    });
   }
 }

@@ -11,7 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsOptional, ValidateNested } from "class-validator";
+import { Po3aorderCreateNestedManyWithoutOfStoresInput } from "./Po3aorderCreateNestedManyWithoutOfStoresInput";
+import { Type } from "class-transformer";
 
 @InputType()
 class OfStoreCreateInput {
@@ -36,6 +38,18 @@ class OfStoreCreateInput {
     nullable: true,
   })
   fld2?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => Po3aorderCreateNestedManyWithoutOfStoresInput,
+  })
+  @ValidateNested()
+  @Type(() => Po3aorderCreateNestedManyWithoutOfStoresInput)
+  @IsOptional()
+  @Field(() => Po3aorderCreateNestedManyWithoutOfStoresInput, {
+    nullable: true,
+  })
+  po3aorders?: Po3aorderCreateNestedManyWithoutOfStoresInput;
 }
 
 export { OfStoreCreateInput as OfStoreCreateInput };

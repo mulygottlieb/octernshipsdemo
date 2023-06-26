@@ -50,6 +50,17 @@ class Po3aorderOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  of_storeId?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   t1?: SortOrder;
 
   @ApiProperty({

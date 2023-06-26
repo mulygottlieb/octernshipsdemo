@@ -19,18 +19,21 @@ model User {
 }
 
 model Po3aorder {
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  t1        String?
-  t2        String?
-  t3        String?
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  id         String   @id @default(cuid())
+  of_store   OfStore? @relation(fields: [of_storeId], references: [id])
+  of_storeId String?
+  t1         String?
+  t2         String?
+  t3         String?
+  updatedAt  DateTime @updatedAt
 }
 
 model OfStore {
-  createdAt DateTime @default(now())
-  fld1      String?
-  fld2      String?
-  id        String   @id @default(cuid())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime    @default(now())
+  fld1       String?
+  fld2       String?
+  id         String      @id @default(cuid())
+  po3aorders Po3aorder[]
+  updatedAt  DateTime    @updatedAt
 }

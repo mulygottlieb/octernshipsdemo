@@ -10,7 +10,7 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Po3aorder } from "@prisma/client";
+import { Prisma, Po3aorder, OfStore } from "@prisma/client";
 
 export class Po3aorderServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -45,5 +45,13 @@ export class Po3aorderServiceBase {
     args: Prisma.SelectSubset<T, Prisma.Po3aorderDeleteArgs>
   ): Promise<Po3aorder> {
     return this.prisma.po3aorder.delete(args);
+  }
+
+  async getOfStore(parentId: string): Promise<OfStore | null> {
+    return this.prisma.po3aorder
+      .findUnique({
+        where: { id: parentId },
+      })
+      .of_store();
   }
 }
