@@ -26,6 +26,7 @@ import { Po3aorderCountArgs } from "./Po3aorderCountArgs";
 import { Po3aorderFindManyArgs } from "./Po3aorderFindManyArgs";
 import { Po3aorderFindUniqueArgs } from "./Po3aorderFindUniqueArgs";
 import { Po3aorder } from "./Po3aorder";
+import { OfStore } from "../../ofStore/base/OfStore";
 import { Po3aorderService } from "../po3aorder.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Po3aorder)
@@ -92,7 +93,15 @@ export class Po3aorderResolverBase {
   ): Promise<Po3aorder> {
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        of_store: args.data.of_store
+          ? {
+              connect: args.data.of_store,
+            }
+          : undefined,
+      },
     });
   }
 
@@ -109,7 +118,15 @@ export class Po3aorderResolverBase {
     try {
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          of_store: args.data.of_store
+            ? {
+                connect: args.data.of_store,
+              }
+            : undefined,
+        },
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -140,5 +157,26 @@ export class Po3aorderResolverBase {
       }
       throw error;
     }
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => OfStore, {
+    nullable: true,
+    name: "ofStore",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "OfStore",
+    action: "read",
+    possession: "any",
+  })
+  async resolveFieldOfStore(
+    @graphql.Parent() parent: Po3aorder
+  ): Promise<OfStore | null> {
+    const result = await this.service.getOfStore(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

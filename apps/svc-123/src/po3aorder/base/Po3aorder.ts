@@ -11,8 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional } from "class-validator";
+import { IsDate, IsString, ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
+import { OfStore } from "../../ofStore/base/OfStore";
 
 @ObjectType()
 class Po3aorder {
@@ -31,6 +32,15 @@ class Po3aorder {
   @IsString()
   @Field(() => String)
   id!: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => OfStore,
+  })
+  @ValidateNested()
+  @Type(() => OfStore)
+  @IsOptional()
+  of_store?: OfStore | null;
 
   @ApiProperty({
     required: false,

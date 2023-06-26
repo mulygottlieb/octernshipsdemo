@@ -48,10 +48,25 @@ export class Po3aorderControllerBase {
   })
   async create(@common.Body() data: Po3aorderCreateInput): Promise<Po3aorder> {
     return await this.service.create({
-      data: data,
+      data: {
+        ...data,
+
+        of_store: data.of_store
+          ? {
+              connect: data.of_store,
+            }
+          : undefined,
+      },
       select: {
         createdAt: true,
         id: true,
+
+        of_store: {
+          select: {
+            id: true,
+          },
+        },
+
         t1: true,
         t2: true,
         t3: true,
@@ -79,6 +94,13 @@ export class Po3aorderControllerBase {
       select: {
         createdAt: true,
         id: true,
+
+        of_store: {
+          select: {
+            id: true,
+          },
+        },
+
         t1: true,
         t2: true,
         t3: true,
@@ -107,6 +129,13 @@ export class Po3aorderControllerBase {
       select: {
         createdAt: true,
         id: true,
+
+        of_store: {
+          select: {
+            id: true,
+          },
+        },
+
         t1: true,
         t2: true,
         t3: true,
@@ -140,10 +169,25 @@ export class Po3aorderControllerBase {
     try {
       return await this.service.update({
         where: params,
-        data: data,
+        data: {
+          ...data,
+
+          of_store: data.of_store
+            ? {
+                connect: data.of_store,
+              }
+            : undefined,
+        },
         select: {
           createdAt: true,
           id: true,
+
+          of_store: {
+            select: {
+              id: true,
+            },
+          },
+
           t1: true,
           t2: true,
           t3: true,
@@ -180,6 +224,13 @@ export class Po3aorderControllerBase {
         select: {
           createdAt: true,
           id: true,
+
+          of_store: {
+            select: {
+              id: true,
+            },
+          },
+
           t1: true,
           t2: true,
           t3: true,

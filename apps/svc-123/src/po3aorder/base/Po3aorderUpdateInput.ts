@@ -11,10 +11,24 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
+import { OfStoreWhereUniqueInput } from "../../ofStore/base/OfStoreWhereUniqueInput";
+import { ValidateNested, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
 
 @InputType()
 class Po3aorderUpdateInput {
+  @ApiProperty({
+    required: false,
+    type: () => OfStoreWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => OfStoreWhereUniqueInput)
+  @IsOptional()
+  @Field(() => OfStoreWhereUniqueInput, {
+    nullable: true,
+  })
+  of_store?: OfStoreWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,
